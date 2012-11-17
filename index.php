@@ -5,7 +5,7 @@
 	// set vars
 	$tvtuner = new tvtuner();
 	$formatOutput = 'json';
-	//$channels = $tvtuner->getChannelsArray('SELECT * FROM stations', $formatOutput);
+
 	$queryString = explode('/', $_SERVER["QUERY_STRING"]);
 
 	if (isset($queryString[1]))
