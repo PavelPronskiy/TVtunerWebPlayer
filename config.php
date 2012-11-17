@@ -15,20 +15,4 @@ define('sceneHeight','160');
 define('channelImagesDir', $docRoot.'ChannelIcons');
 define('channelsDatabase', $docRoot.channelsDatabaseName);
 
-$absolute_path = "/home/tvtuner-player/www";
-$icons_dir = "ChannelIcons";
-$station_db = "stationlist.db";
-$clicks_db = "clicks.db";
-
-$scene_width = '212';
-$scene_height = '160';
-
-//$channel_url = 'rtsp://tv.pronskiy.ru:8888/stream.sdp';
-$channel_url = 'http://10.0.0.13:8887';
-// list channel sorter
-$h_channels_count = '30';
-
-require($docRoot.'/classes/tvtuner.class.php');
-
-
 ?>

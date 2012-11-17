@@ -1,6 +1,8 @@
 <?php
 
+	// includes
 	require('config.php');
+	require($docRoot.'/classes/tvtuner.class.php');
 
 	// set vars
 	$tvtuner = new tvtuner();
