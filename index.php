@@ -39,7 +39,7 @@
 				echo $tvtuner->setChannel($queryData);
 				break;
 			default:
-				echo "No.";
+				echo "Not you. Go away!";
 				break;
 		}
 	} else {
