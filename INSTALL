@@ -1,0 +1,42 @@
+
+=========================================
+HARDWARE REQUIRE:
+=========================================
+
+0. TV Card (PCI/PCI-E) and drivers
+Multimedia controller: Philips Semiconductors SAA7131/SAA7133/SAA7135 Video Broadcast Decoder (rev d1)
+block device this card required path /dev/video0
+
+=========================================
+SOFTWARE REQUIRE:
+=========================================
+
+0. Gentoo Linux
+-----------------------------------------
+1. Apache 2
+# echo "www-servers/apache	ssl suexec -debug -doc -ldap -static -threads" >> /etc/portage/package.use
+# echo 'APACHE2_MODULES="actions alias auth_basic authn_alias authn_anon authn_dbm authn_default authn_file authz_dbm authz_default authz_groupfile authz_host authz_owner authz_user autoindex cache cgi cgid dav dav_fs dav_lock deflate dir disk_cache env expires ext_filter file_cache filter headers include info log_config logio mem_cache mime mime_magic negotiation rewrite setenvif speling status unique_id userdir usertrack vhost_alias"' >> /etc/make.conf
+# echo 'APACHE2_MPMS="prefork"' >> /etc/make.conf
+# emerge =www-servers/apache-2.2.23
+-----------------------------------------
+2. php-cgi 5.3
+# echo "dev-lang/php	bcmath bzip2 cgi crypt ctype curl fileinfo filter fpm ftp gd gmp hash iconv json mhash mysql mysqli mysqlnd nls pdo phar posix readline session sharedmem simplexml sockets sqlite sqlite3 ssl tokenizer truetype unicode xml xmlreader xmlrpc xmlwriter zip zlib" >> /etc/portage/package.use
+# emerge =dev-lang/php-5.3.15
+-----------------------------------------
+3. VideoLAN
+# echo "media-video/vlc	X alsa avcodec avformat encode ffmpeg gcrypt httpd live lua mmx mp3 mpeg ncurses ogg png postproc rtsp run-as-root sqlite sse swscale theora truetype udev v4l vlm x264 xcb xml" >> /etc/portage/package.use
+# emerge =media-video/vlc-2.0.3
+-----------------------------------------
+4. sudo
+# emerge sudo
+
+=========================================
+CONFIGURATION SOFTWARE:
+=========================================
+
+0. Apache 2
+# cp conf/apache_virtualhost_example.conf /etc/apache2/vhosts.d/tv.domain.local.conf
+-----------------------------------------
+1. php-cgi 5.3
+# cp conf/php-cgi.ini /etc/php/cgi-php5.3/php.ini
+
