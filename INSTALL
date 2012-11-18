@@ -40,3 +40,5 @@ CONFIGURATION SOFTWARE:
 1. php-cgi 5.3
 # cp conf/php-cgi.ini /etc/php/cgi-php5.3/php.ini
 
+2. sudoers
+cp conf/tvtuner.sudoers /etc/sudoers.d/
