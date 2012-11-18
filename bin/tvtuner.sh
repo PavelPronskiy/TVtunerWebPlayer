@@ -47,7 +47,6 @@ __v4l2_set_standard() {
 __kill() {
 
 	# $1 -- vlc,v320,v640
-	
 	if [ -f "$PID_FILE" ]
 	then
 		local pid=`cat $PID_FILE`
@@ -60,114 +59,90 @@ __kill() {
 			exit 1
 		fi
 	else
-		#_e "[crit]: pid file: $PID_FILE not found"
 		return 1
 	fi
 }
 
 __run_tvtuner() {
-# methods
-case "$1" in
-	start)
-	
-		if [ -f "$PID_FILE" ]
-		then
-			local pid=`cat $PID_FILE`
-			if [ -n "$pid" ]
+	case "$1" in
+		start)
+		
+			if [ -f "$PID_FILE" ]
 			then
-				_e "[info]: service $1 already started, pid: $pid"
-				return 1
+				local pid=`cat $PID_FILE`
+				if [ -n "$pid" ]
+				then
+					_e "[info]: service $1 already started, pid: $pid"
+					return 1
+				fi
 			fi
-		fi
 
-		# methods
-		case "$2" in
-			vlc)
-				#__run_tvtuner stop vlc
-				_e "[info]: Starting process $2"
-				cvlc \
-					v4l2:///dev/video0 \
-					:input-slave=alsa://hw:0,0 \
-					:v4l2-caching=300 \
-					--sout '#std{access=http,mux=asf,dst=:'$ROUTER_PORT_VLC'}' \
-					${VERBOSE_OPTIONS}
-				return $?
-			;;
-			v320)
-				#pidof=($(ps xf | grep "[d]st=.*:${ROUTER_PORT_VLC}"))
-				#[ -z "${pidof[0]}" ] && $0 start vlc
-				#__run_tvtuner stop v320
-				_e "[info]: Starting process $2"
-				cvlc \
-					http://${ROUTER_IP}:${ROUTER_PORT_VLC} \
-					--sout '#transcode{vcodec=FLV1,acodec=mp3,vb=1024,fps=25,width=320,height=240,samplerate=44100,ab=128}:duplicate{dst=std{access=http{mime=video/x-flv},mux=ffmpeg{mux=flv},dst='${ROUTER_IP}':'${ROUTER_PORT_V320}'/video.flv}}' \
-					${VERBOSE_OPTIONS}
-				return $?
-			;;
-			v640)
-				#pidof=($(ps xf | grep "[d]st=.*:${ROUTER_PORT_VLC}"))
-				#[ -z "${pidof[0]}" ] && $0 start vlc
-				#__run_tvtuner stop v640
-				_e "[info]: Starting process $2"
-				cvlc \
-					http://${ROUTER_IP}:${ROUTER_PORT_VLC} \
-					--sout '#transcode{vcodec=FLV1,acodec=mp3,vb=6144,fps=25,width=640,height=480,samplerate=44100,ab=256}:duplicate{dst=std{access=http{mime=video/x-flv},mux=ffmpeg{mux=flv},dst='${ROUTER_IP}':'$ROUTER_PORT_V640'/video.flv}}' \
-					${VERBOSE_OPTIONS}
-				return $?
-			;;
-			*)
-				__run_tvtuner help
-			;;
-		esac
-	;;
-	stop)
-		case "$2" in
-			vlc)
-				#pidof=($(ps xf | grep "[d]st=:${ROUTER_PORT_VLC}"))
-				__kill $2
-			;;
-			v320)
-				#pidof=($(ps xf | egrep "[d]st=.*:${ROUTER_PORT_V320}"))
-				#__kill ${pidof[0]}
-				__kill $2
-			;;
-			v640)
-				#pidof=($(ps xf | egrep "[d]st=.*:${ROUTER_PORT_V640}"))
-				#__kill ${pidof[0]}
-				__kill $2
-			;;
-			*)
-				__run_tvtuner help
-			;;
-		esac
-	;;
-	restart)
-		case "$2" in
-			vlc)
-				__run_tvtunerr stop vlc
-				__run_tvtuner start vlc
-			;;
-			v320)
-				__run_tvtuner stop v320
-				__run_tvtuner start v320
-			;;
-			v640)
-				__run_tvtuner stop v640
-				__run_tvtuner start v640
-			;;
-			*)
-				__run_tvtuner restart vlc
-			;;
-		esac
-	;;
-	-h|help|*)
-		_e "$0 service commands: vlc, v320, v640"
-		_e "$0 start vlc - capture video0 device "
-		_e "$0 stop vlc - close capture"
-		_e "$0 -h|help - this message"
-		return 1
-	;;
-esac
+			# methods
+			case "$2" in
+				vlc)
+					_e "[info]: Starting process $2"
+					cvlc \
+						v4l2:///dev/video0 \
+						:input-slave=alsa://hw:0,0 \
+						:v4l2-caching=300 \
+						--sout '#std{access=http,mux=asf,dst=:'$ROUTER_PORT_VLC'}' \
+						${VERBOSE_OPTIONS}
+					return $?
+				;;
+				v320)
+					_e "[info]: Starting process $2"
+					cvlc \
+						http://${ROUTER_IP}:${ROUTER_PORT_VLC} \
+						--sout '#transcode{vcodec=FLV1,acodec=mp3,vb=1024,fps=25,width=320,height=240,samplerate=44100,ab=128}:duplicate{dst=std{access=http{mime=video/x-flv},mux=ffmpeg{mux=flv},dst='${ROUTER_IP}':'${ROUTER_PORT_V320}'/video.flv}}' \
+						${VERBOSE_OPTIONS}
+					return $?
+				;;
+				v640)
+					_e "[info]: Starting process $2"
+					cvlc \
+						http://${ROUTER_IP}:${ROUTER_PORT_VLC} \
+						--sout '#transcode{vcodec=FLV1,acodec=mp3,vb=6144,fps=25,width=640,height=480,samplerate=44100,ab=256}:duplicate{dst=std{access=http{mime=video/x-flv},mux=ffmpeg{mux=flv},dst='${ROUTER_IP}':'$ROUTER_PORT_V640'/video.flv}}' \
+						${VERBOSE_OPTIONS}
+					return $?
+				;;
+				*)
+					__run_tvtuner help
+				;;
+			esac
+		;;
+		stop)
+			case "$2" in
+				vlc)  __kill $2 ;;
+				v320) __kill $2 ;;
+				v640) __kill $2 ;;
+				*) 	  __run_tvtuner help ;;
+			esac
+		;;
+		restart)
+			case "$2" in
+				vlc)
+					__run_tvtunerr stop vlc
+					__run_tvtuner start vlc
+				;;
+				v320)
+					__run_tvtuner stop v320
+					__run_tvtuner start v320
+				;;
+				v640)
+					__run_tvtuner stop v640
+					__run_tvtuner start v640
+				;;
+				*)	__run_tvtuner restart vlc ;;
+			esac
+		;;
+		-h|help|*)
+			_e "$0 service commands: vlc, v320, v640"
+			_e "$0 start vlc - capture video0 device "
+			_e "$0 stop vlc - close capture"
+			_e "$0 -h|help - this message"
+			return 1
+		;;
+	esac
 }
 
 __v4l2_set_standard
