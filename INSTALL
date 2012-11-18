@@ -1,3 +1,4 @@
+## tvtuner player hardware/software information
 
 =========================================
 HARDWARE REQUIRE:
@@ -29,6 +30,9 @@ SOFTWARE REQUIRE:
 -----------------------------------------
 4. sudo
 # emerge sudo
+
+5. v4l-utils
+# emerge =media-tv/v4l-utils-0.8.8
 
 =========================================
 CONFIGURATION SOFTWARE:
